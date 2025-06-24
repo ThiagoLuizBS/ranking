@@ -12,8 +12,9 @@
             <h1>F1 Virtual - Gerenciador de Campeonatos</h1>
             <nav>
                 <ul>
-                    <li><a href="{{ url_for('index') }}">Início</a></li>
-                    <li><a href="{{ url_for('championship_details', championship_id=championship.id) }}">{{ championship.name }}</a></li>
+                    <li><a href="{{ url_for('index') }}">Campeonatos</a></li>
+                    <li><a href="{{ url_for('drivers_list') }}">Pilotos</a></li>
+                    <li><a href="{{ url_for('global_rankings') }}">Ranking Geral</a></li>
                 </ul>
             </nav>
         </div>

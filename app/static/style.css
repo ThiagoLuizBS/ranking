@@ -397,7 +397,44 @@ footer {
   background-color: var(--secondary-color);
 }
 
-/* Responsividade */
+/* Estilos específicos para tela de pontuação */
+.info-box {
+  background-color: #f8f9fa;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 15px;
+  margin-bottom: 20px;
+  color: var(--secondary-color);
+}
+
+.info-box p {
+  margin-bottom: 10px;
+}
+
+.info-box p:last-child {
+  margin-bottom: 0;
+}
+
+.scoring-form .grid-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.scoring-input {
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
 @media (max-width: 768px) {
   header .container {
     flex-direction: column;
@@ -424,5 +461,13 @@ footer {
   .form-actions .button {
     margin-right: 0;
     margin-bottom: 1rem;
+  }
+
+  .scoring-form .grid-form {
+    grid-template-columns: 1fr;
+  }
+
+  .button-group {
+    flex-direction: column;
   }
 }

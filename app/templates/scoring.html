@@ -15,12 +15,10 @@
         <h1>F1 Virtual - Gerenciador de Campeonatos</h1>
         <nav>
           <ul>
-            <li><a href="{{ url_for('index') }}">Início</a></li>
+            <li><a href="{{ url_for('index') }}">Campeonatos</a></li>
+            <li><a href="{{ url_for('drivers_list') }}">Pilotos</a></li>
             <li>
-              <a
-                href="{{ url_for('championship_details', championship_id=championship.id) }}"
-                >{{ championship.name }}</a
-              >
+              <a href="{{ url_for('global_rankings') }}">Ranking Geral</a>
             </li>
           </ul>
         </nav>
@@ -39,12 +37,19 @@
       <section class="main-content">
         <h2>Sistema de Pontuação - {{ championship.name }}</h2>
 
-        <form method="post" class="form scoring-form">
-          <p class="form-info">
-            Defina os pontos para cada posição. Deixe em branco para não
-            pontuar.
+        <div class="info-box">
+          <p>
+            Aqui você pode configurar quantos pontos cada posição receberá nas
+            corridas. Os pontos serão aplicados automaticamente aos resultados
+            das corridas deste campeonato.
           </p>
+          <p>
+            <strong>Instruções:</strong> Digite o número de pontos para cada
+            posição. Deixe em branco para não pontuar aquela posição.
+          </p>
+        </div>
 
+        <form method="post" class="form scoring-form">
           <div class="grid-form">
             {% for i in range(1, 21) %}
             <div class="form-group grid-row">
@@ -56,9 +61,27 @@
                 min="0"
                 max="100"
                 value="{{ scoring.positions[str(i)] if str(i) in scoring.positions else '' }}"
+                class="scoring-input"
               />
             </div>
             {% endfor %}
+          </div>
+
+          <div class="button-group">
+            <button
+              type="button"
+              id="btnF1Format"
+              class="button button-secondary"
+            >
+              Formato F1 (25-18-15-12-10-8-6-4-2-1)
+            </button>
+            <button
+              type="button"
+              id="btnClearAll"
+              class="button button-secondary"
+            >
+              Limpar Todos
+            </button>
           </div>
 
           <div class="form-actions">
@@ -80,5 +103,42 @@
         <p>&copy; 2025 - F1 Virtual - Gerenciador de Campeonatos</p>
       </div>
     </footer>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Botão para aplicar formato F1
+        document
+          .getElementById("btnF1Format")
+          .addEventListener("click", function () {
+            const f1Points = {
+              1: 25,
+              2: 18,
+              3: 15,
+              4: 12,
+              5: 10,
+              6: 8,
+              7: 6,
+              8: 4,
+              9: 2,
+              10: 1,
+            };
+
+            // Preencher os campos com os pontos do formato F1
+            for (let i = 1; i <= 20; i++) {
+              const input = document.getElementById(`points_${i}`);
+              input.value = f1Points[i] || "";
+            }
+          });
+
+        // Botão para limpar todos os campos
+        document
+          .getElementById("btnClearAll")
+          .addEventListener("click", function () {
+            for (let i = 1; i <= 20; i++) {
+              document.getElementById(`points_${i}`).value = "";
+            }
+          });
+      });
+    </script>
   </body>
 </html>

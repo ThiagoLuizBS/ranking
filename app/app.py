@@ -266,6 +266,9 @@ def save_scoring(championship_id, scoring):
     # Garantir que o diretório existe
     os.makedirs(os.path.dirname(scoring_file), exist_ok=True)
     
+    # Log para debug
+    print(f"Salvando pontuação: {scoring}")
+    
     with open(scoring_file, 'w', encoding='utf-8') as f:
         json.dump(scoring, f, indent=4)
 
@@ -292,8 +295,9 @@ def calculate_standings(championship_id):
                 standings[driver_id]['positions'][race_id] = position
                 
                 # Adicionar pontos
-                if position in scoring['positions']:
-                    points = int(scoring['positions'][position])
+                position_str = str(position)
+                if position_str in scoring['positions']:
+                    points = int(scoring['positions'][position_str])
                     standings[driver_id]['points'] += points
     
     # Converter para lista e ordenar por pontuação
@@ -616,8 +620,14 @@ def scoring_settings(championship_id):
         for i in range(1, 21):  # Permitir até 20 posições pontuadas
             position_key = str(i)
             points = request.form.get(f'points_{i}')
-            if points and points.isdigit():
-                positions[position_key] = int(points)
+            if points and points.strip():  # Verificar se não está vazio
+                try:
+                    points_value = int(points)
+                    if points_value >= 0:  # Garantir que os pontos são não-negativos
+                        positions[position_key] = points_value
+                except ValueError:
+                    # Se não for um número válido, ignore
+                    pass
         
         new_scoring = {'positions': positions}
         save_scoring(championship_id, new_scoring)
