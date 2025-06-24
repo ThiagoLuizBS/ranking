@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ championship.name }} - F1 Virtual</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <h1>F1 Virtual - Gerenciador de Campeonatos</h1>
+        <nav>
+          <ul>
+            <li><a href="{{ url_for('index') }}">Início</a></li>
+            <li>
+              <a
+                href="{{ url_for('championship_details', championship_id=championship.id) }}"
+                >{{ championship.name }}</a
+              >
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      {% with messages = get_flashed_messages() %} {% if messages %}
+      <div class="flash-messages">
+        {% for message in messages %}
+        <div class="flash-message">{{ message }}</div>
+        {% endfor %}
+      </div>
+      {% endif %} {% endwith %}
+
+      <section class="main-content">
+        <h2>{{ championship.name }} ({{ championship.year }})</h2>
+
+        <div class="tab-navigation">
+          <a href="#standings" class="tab-link active" data-tab="standings"
+            >Classificação</a
+          >
+          <a href="#drivers" class="tab-link" data-tab="drivers">Pilotos</a>
+          <a href="#races" class="tab-link" data-tab="races">Corridas</a>
+          <a
+            href="{{ url_for('scoring_settings', championship_id=championship.id) }}"
+            class="tab-link"
+            >Pontuação</a
+          >
+        </div>
+
+        <div class="tab-content">
+          <div id="standings" class="tab-pane active">
+            <h3>Classificação</h3>
+
+            {% if standings %}
+            <table class="standings-table">
+              <thead>
+                <tr>
+                  <th>Pos</th>
+                  <th>Piloto</th>
+                  <th>Equipe</th>
+                  <th>Pontos</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for position in standings %}
+                <tr>
+                  <td>{{ loop.index }}</td>
+                  <td>{{ position.driver.name }}</td>
+                  <td>{{ position.driver.team }}</td>
+                  <td>{{ position.points }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+
+            <div class="actions">
+              <a
+                href="{{ url_for('standings', championship_id=championship.id) }}"
+                class="button"
+                >Ver Classificação Completa</a
+              >
+            </div>
+            {% else %}
+            <p class="no-data">Nenhum resultado registrado ainda.</p>
+            {% endif %}
+          </div>
+          <div id="drivers" class="tab-pane">
+            <h3>Pilotos</h3>
+
+            <div class="actions">
+              <a
+                href="{{ url_for('add_driver_to_championship_route', championship_id=championship.id) }}"
+                class="button"
+                >Adicionar Piloto</a
+              >
+            </div>
+
+            {% if drivers %}
+            <table class="drivers-table">
+              <thead>
+                <tr>
+                  <th>Piloto</th>
+                  <th>Equipe</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for driver in drivers %}
+                <tr>
+                  <td>{{ driver.name }}</td>
+                  <td>{{ driver.team }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            {% else %}
+            <p class="no-data">
+              Nenhum piloto cadastrado. Adicione pilotos para começar!
+            </p>
+            {% endif %}
+          </div>
+
+          <div id="races" class="tab-pane">
+            <h3>Corridas</h3>
+
+            <div class="actions">
+              <a
+                href="{{ url_for('new_race', championship_id=championship.id) }}"
+                class="button"
+                >Adicionar Corrida</a
+              >
+            </div>
+
+            {% if races %}
+            <table class="races-table">
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Nome</th>
+                  <th>Circuito</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for race in races %}
+                <tr>
+                  <td>{{ race.date }}</td>
+                  <td>{{ race.name }}</td>
+                  <td>{{ race.track }}</td>
+                  <td>
+                    <a
+                      href="{{ url_for('race_results', championship_id=championship.id, race_id=race.id) }}"
+                      class="button button-small"
+                      >Resultados</a
+                    >
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            {% else %}
+            <p class="no-data">
+              Nenhuma corrida cadastrada. Adicione corridas para começar!
+            </p>
+            {% endif %}
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container">
+        <p>&copy; 2025 - F1 Virtual - Gerenciador de Campeonatos</p>
+      </div>
+    </footer>
+
+    <script>
+      // Código para navegação em abas
+      document.addEventListener("DOMContentLoaded", function () {
+        const tabLinks = document.querySelectorAll(".tab-link");
+        const tabPanes = document.querySelectorAll(".tab-pane");
+
+        tabLinks.forEach((link) => {
+          link.addEventListener("click", function (e) {
+            e.preventDefault();
+
+            // Remover classe active de todas as abas
+            tabLinks.forEach((l) => l.classList.remove("active"));
+            tabPanes.forEach((p) => p.classList.remove("active"));
+
+            // Adicionar classe active na aba clicada
+            this.classList.add("active");
+
+            // Mostrar conteúdo da aba
+            const tabId = this.getAttribute("data-tab");
+            document.getElementById(tabId).classList.add("active");
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pilotos - F1 Virtual</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <h1>F1 Virtual - Gerenciador de Campeonatos</h1>
+        <nav>
+          <ul>
+            <li><a href="{{ url_for('index') }}">Início</a></li>
+            <li><a href="{{ url_for('drivers_list') }}">Pilotos</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      {% with messages = get_flashed_messages() %} {% if messages %}
+      <div class="flash-messages">
+        {% for message in messages %}
+        <div class="flash-message">{{ message }}</div>
+        {% endfor %}
+      </div>
+      {% endif %} {% endwith %}
+
+      <section class="main-content">
+        <h2>Pilotos Cadastrados</h2>
+
+        <div class="actions">
+          <a href="{{ url_for('new_global_driver') }}" class="button"
+            >Novo Piloto</a
+          >
+          <a href="{{ url_for('index') }}" class="button button-secondary"
+            >Voltar para Campeonatos</a
+          >
+        </div>
+
+        {% if drivers %}
+        <table class="drivers-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nome</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for driver in drivers %}
+            <tr>
+              <td>{{ driver.id }}</td>
+              <td>{{ driver.name }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+        <p class="no-data">
+          Nenhum piloto cadastrado. Adicione pilotos para começar!
+        </p>
+        {% endif %}
+      </section>
+    </main>
+
+    <footer>
+      <div class="container">
+        <p>&copy; 2025 - F1 Virtual - Gerenciador de Campeonatos</p>
+      </div>
+    </footer>
+  </body>
+</html>

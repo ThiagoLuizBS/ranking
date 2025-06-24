@@ -1,0 +1,13 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Iniciar Aplicativo F1 Virtual",
+      "type": "shell",
+      "command": "cd c:\\Users\\ThiagoLuiz\\Downloads\\ranking\\app && python app.py",
+      "problemMatcher": [],
+      "group": "none",
+      "isBackground": false
+    }
+  ]
+}
