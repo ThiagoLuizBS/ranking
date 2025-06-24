@@ -22,4 +22,4 @@ ENV FLASK_APP=app/app.py
 ENV FLASK_ENV=production
 
 # Comando para iniciar a aplicação
-CMD ["python", "app/app.py"]
+CMD ["gunicorn", "-b", "0.0.0.0:5000", "app:app"]
